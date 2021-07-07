@@ -1,0 +1,21 @@
+{
+    "name": "gebruederheitz/wp-gutenberg-blocks",
+    "description": "Helps you get your blocks on the road",
+    "type": "library",
+    "license": "GPL-3.0-only",
+    "autoload": {
+        "psr-4": {
+            "Gebruederheitz\\GutenbergBlocks\\": "Gebruederheitz/GutenbergBlocks/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Andreas Maros",
+            "email": "andreas.maros@gebruederheitz.de"
+        }
+    ],
+    "require": {
+	    "php": "^7.3",
+        "symfony/yaml": "^5.3"
+    }
+}
