@@ -3,8 +3,9 @@
 namespace Gebruederheitz\GutenbergBlocks;
 
 use Gebruederheitz\GutenbergBlocks\Helper\Yaml;
+use Gebruederheitz\SimpleSingleton\Singleton;
 
-class BlockRegistrar
+class BlockRegistrar extends Singleton
 {
     /**
      * @hook ghwp-register-dynamic-blocks
@@ -63,11 +64,15 @@ class BlockRegistrar
      * @param string            $scriptHandle         The handle for the editor
      *                                                script file.
      */
-    public function __construct(
+    protected function __construct(
         $customAllowedBlocks = null,
         string $scriptPath = '/js/backend.js',
         string $scriptHandle = 'ghwp-gutenberg-blocks'
     ) {
+        parent::__construct();
+
+        error_log('BlockRegistrar created.');
+
         $this->scriptPath = $scriptPath;
         $this->scriptHandle = $scriptHandle;
 

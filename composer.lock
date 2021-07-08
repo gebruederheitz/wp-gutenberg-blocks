@@ -4,8 +4,48 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "85b477a65fd17091562d5d4eecf0d5c2",
+    "content-hash": "a88b8fd7bf30398bca1a6a01f6c07de4",
     "packages": [
+        {
+            "name": "gebruederheitz/simple-singleton",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/gebruederheitz/simple-singleton.git",
+                "reference": "302a7b4fa60f1303e240f43508f08d8abe5118df"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/gebruederheitz/simple-singleton/zipball/302a7b4fa60f1303e240f43508f08d8abe5118df",
+                "reference": "302a7b4fa60f1303e240f43508f08d8abe5118df",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Gebruederheitz\\SimpleSingleton\\": "Gebruederheitz/SimpleSingleton/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0-only"
+            ],
+            "authors": [
+                {
+                    "name": "Andreas Maros",
+                    "email": "andreas.maros@gebruederheitz.de"
+                }
+            ],
+            "description": "A simple implementation of a singleton as an extensible abstract class or as a trait.",
+            "support": {
+                "issues": "https://github.com/gebruederheitz/simple-singleton/issues",
+                "source": "https://github.com/gebruederheitz/simple-singleton/tree/v1.0.0"
+            },
+            "time": "2021-07-05T17:07:49+00:00"
+        },
         {
             "name": "symfony/deprecation-contracts",
             "version": "v2.4.0",
