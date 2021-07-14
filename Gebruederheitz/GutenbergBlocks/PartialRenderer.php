@@ -38,7 +38,7 @@ class PartialRenderer
         $content = ob_get_contents();
         ob_end_clean();
 
-        wp_reset_postdata;
+        wp_reset_postdata();
 
         return $content;
     }
