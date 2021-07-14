@@ -52,12 +52,12 @@ class DynamicBlock
 
     public function register()
     {
-        add_filter(BlockRegistrar::HOOK_REGISTER_DYNAMIC_BLOCKS, function(&$blocks) {
+         add_filter(BlockRegistrar::HOOK_REGISTER_DYNAMIC_BLOCKS, function($blocks) {
             $blocks[] = $this;
             return $blocks;
         });
 
-        add_filter(BlockRegistrar::HOOK_ALLOWED_BLOCKS, function(&$allowedBlocks) {
+        add_filter(BlockRegistrar::HOOK_ALLOWED_BLOCKS, function($allowedBlocks) {
             $allowedBlocks[] = $this->name;
             return $allowedBlocks;
         });
