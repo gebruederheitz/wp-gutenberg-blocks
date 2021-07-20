@@ -14,7 +14,7 @@ class PartialRenderer
      *
      * @return false|string          Rendered content
      */
-    public static function render(string $templatePath, array $data = [], string $overridePath = null)
+    public static function render(string $templatePath, array $data = [], string $content = '', string $overridePath = null)
     {
         foreach ($data as $name => $datum) {
             set_query_var($name, $datum);
@@ -25,6 +25,9 @@ class PartialRenderer
         if (isset($post) || isset($data['post'])) {
             $post = $post ?? $data['post'];
             setup_postdata($post);
+        }
+        if (!empty($content)) {
+            set_query_var('innerBlocks', $content);
         }
 
         $templatePathUsed = $templatePath;

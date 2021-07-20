@@ -189,12 +189,12 @@ class DynamicBlock
      *
      * @return false|string|null
      */
-    public function renderBlock(array $attributes = [])
+    public function renderBlock(array $attributes = [], string $content = '')
     {
         if (!$this->requiredAttributesArePresent($attributes)) {
             return null;
         }
 
-        return PartialRenderer::render($this->partial, $attributes, $this->templateOverridePath);
+        return PartialRenderer::render($this->partial, $attributes, $content, $this->templateOverridePath);
     }
 }
