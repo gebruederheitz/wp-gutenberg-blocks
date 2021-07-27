@@ -20,14 +20,14 @@ Make sure you have Composer autoload or an alternative class loader present.
 
 ## Initializing the block registrar
 
-Initialize the registrar (usually in your `functions.php`):
+Initialize the registrar singleton (usually in your `functions.php`):
 
 ```php
 <?php
 
 use Gebruederheitz\GutenbergBlocks\BlockRegistrar;
 
-new BlockRegistrar();
+BlockRegistrar::getInstance();
 ```
 
 You may pass an alternative handle and path of your editor script to the 
@@ -38,7 +38,10 @@ constructor:
 
 use Gebruederheitz\GutenbergBlocks\BlockRegistrar;
 
-new BlockRegistrar(null, '/scripts/gutenberg.js', 'my-gutenberg-blocks');
+BlockRegistrar::getInstance()
+    ->setScriptPath('/scripts/gutenberg.js')
+    ->setScriptHandle('my-gutenberg-blocks')
+;
 ```
 
 The script handle defaults to `ghwp-gutenberg-blocks`, the script path to
@@ -53,7 +56,7 @@ you want to skip all that and simply allow all block types, pass `true` as the
 first parameter to the registrar's constructor:
 
 ```php
-new BlockRegistrar(true);
+BlockRegistrar::getInstance()->setAllowedBlocks(true);
 ```
 
 #### Dynamically through an array
@@ -62,7 +65,9 @@ You can also **provide a list of allowed blocks via an array** (it defaults to a
 empty array, initially allowing no blocks whatsoever):
 
 ```php
-new BlockRegistrar(['core/columns', 'core/column', 'core/paragraph']);
+BlockRegistrar::getInstance()->setAllowedBlocks(
+    ['core/columns', 'core/column', 'core/paragraph']
+);
 ```
 
 #### Using a configuration file
@@ -82,14 +87,16 @@ themes root as returned by `get_theme_root()` **or** as an absolute filesystem
 path) to the registrar's constructor as a string:
 
 ```php
-new BlockRegistrar('/my-theme/config/example.yaml');
+BlockRegistrar::getInstance()->setAllowedBlocks('/my-theme/config/example.yaml');
 ```
 
 
 #### Even more dynamically through the filter hook
 
 The third option is to use the filter hook to add allowed blocks (this is what
-the `DynamicBlock` class uses to automatically set up its availability):
+the `DynamicBlock` class uses to automatically set up its availability). The
+filter hook will always be called, even if you provide a custom list through
+one of the methods above:
 
 ```php
 use Gebruederheitz\GutenbergBlocks\BlockRegistrar;
@@ -101,6 +108,9 @@ function allowCustomBlock(array $allowedBlocks): array {
 
 add_filter(BlockRegistrar::HOOK_ALLOWED_BLOCKS, 'allowCustomBlock');
 ```
+
+The parameter `$allowedBlocks` will contain any blocks already allowed through
+any of the other methods.
 
 
 ## Registering a dynamic block
@@ -119,7 +129,7 @@ directory) through the fifth parameter.
 use Gebruederheitz\GutenbergBlocks\DynamicBlock;
 use Gebruederheitz\GutenbergBlocks\BlockRegistrar;
 
-new BlockRegistrar();
+BlockRegistrar::getInstance();
 
 $myblock = new DynamicBlock(
     // Required: Block name needs to match the name the block was registered with in JS

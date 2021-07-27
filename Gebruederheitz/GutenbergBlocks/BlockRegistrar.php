@@ -29,12 +29,12 @@ class BlockRegistrar extends Singleton
     /**
      * @var string The handle for the editor script file.
      */
-    protected $scriptHandle;
+    protected $scriptHandle = 'ghwp-gutenberg-blocks';
 
     /**
      * @var string The path to the editor script file relative to the theme root
      */
-    protected $scriptPath;
+    protected $scriptPath = '/js/backend.js';
 
     /**
      * @var array|string|true An array of allowed block names or the path to a
@@ -64,24 +64,33 @@ class BlockRegistrar extends Singleton
      * @param string            $scriptHandle         The handle for the editor
      *                                                script file.
      */
-    protected function __construct(
-        $customAllowedBlocks = null,
-        string $scriptPath = '/js/backend.js',
-        string $scriptHandle = 'ghwp-gutenberg-blocks'
-    ) {
+    protected function __construct() {
         parent::__construct();
-
         error_log('BlockRegistrar created.');
-
-        $this->scriptPath = $scriptPath;
-        $this->scriptHandle = $scriptHandle;
-
-        if (isset($customAllowedBlocks)) {
-            $this->customAllowedBlocks = $customAllowedBlocks;
-        }
 
         add_action('init', [$this, 'onInit']);
         add_action('admin_init', [$this, 'onAdminInit']);
+    }
+
+    public function setScriptPath(string $scriptPath): self
+    {
+        $this->scriptPath = $scriptPath;
+
+        return $this;
+    }
+
+    public function setScriptHandle(string $scriptHandle): self
+    {
+        $this->scriptHandle = $scriptHandle;
+
+        return $this;
+    }
+
+    public function setAllowedBlocks($customAllowedBlocks = null): self
+    {
+        $this->customAllowedBlocks = $customAllowedBlocks;
+
+        return $this;
     }
 
     /**
