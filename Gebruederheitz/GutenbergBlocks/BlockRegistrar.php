@@ -101,8 +101,8 @@ class BlockRegistrar extends Singleton
     }
 
     /**
-     * Callback for the 'allowed_block_types' filter hook, returning an array
-     * of allowed core & custom block types shown to the editor.
+     * Callback for the 'allowed_block_types_all' filter hook, returning an
+     * array of allowed core & custom block types shown to the editor.
      *
      * @return string[]|bool
      */
@@ -130,7 +130,7 @@ class BlockRegistrar extends Singleton
     protected function registerBlockScripts()
     {
         add_filter(
-            'allowed_block_types',
+            'allowed_block_types_all',
             [$this, 'onAllowedBlockTypes']
         );
         wp_register_script(
