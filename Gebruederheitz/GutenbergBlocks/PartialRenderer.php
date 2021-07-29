@@ -29,6 +29,9 @@ class PartialRenderer
         if (!empty($content)) {
             set_query_var('innerBlocks', $content);
         }
+        if (!empty($data['className'])) {
+            set_query_var('className', $data(['className']));
+        }
 
         $templatePathUsed = $templatePath;
 
