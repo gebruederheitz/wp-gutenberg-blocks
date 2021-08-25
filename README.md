@@ -2,6 +2,8 @@
 
 _Helps you get your blocks on the road_
 
+Find it on packagist: https://packagist.org/packages/gebruederheitz/wp-gutenberg-blocks
+
 ---
 
 Helps you with registering and rendering your custom Gutenberg blocks and acts 
