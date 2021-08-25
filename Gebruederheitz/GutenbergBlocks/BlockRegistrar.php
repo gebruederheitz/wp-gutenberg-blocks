@@ -66,7 +66,6 @@ class BlockRegistrar extends Singleton
      */
     protected function __construct() {
         parent::__construct();
-        error_log('BlockRegistrar created.');
 
         add_action('init', [$this, 'onInit']);
         add_action('admin_init', [$this, 'onAdminInit']);
