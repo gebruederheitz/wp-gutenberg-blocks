@@ -43,11 +43,6 @@ class BlockRegistrar extends Singleton
     protected $customAllowedBlocks = [];
 
     /**
-     * @var array
-     */
-    protected $filteredAllowedBlocks = [];
-
-    /**
      * Returns the current theme version as read from the style.css.
      *
      * @return string
@@ -109,12 +104,7 @@ class BlockRegistrar extends Singleton
      */
     public function onAllowedBlockTypes()
     {
-        $allowedBlocks = $this->getAllowedBlockTypes();
-
-        if ($allowedBlocks === true) return true;
-
-        $this->filteredAllowedBlocks = apply_filters(self::HOOK_ALLOWED_BLOCKS, $allowedBlocks);
-        return $this->filteredAllowedBlocks;
+        return $this->getAllowedBlockTypes();
     }
 
     /**
@@ -135,10 +125,10 @@ class BlockRegistrar extends Singleton
         ) {
             $allowedBlocks = Yaml::read($this->customAllowedBlocks, [], 'gutenbergAllowedBlocks');
         } else if ($this->customAllowedBlocks === true) {
-            $allowedBlocks = true;
+            return true;
         }
 
-        return $allowedBlocks;
+        return apply_filters(self::HOOK_ALLOWED_BLOCKS, $allowedBlocks);
     }
 
     /**
