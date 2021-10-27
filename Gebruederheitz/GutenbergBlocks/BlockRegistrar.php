@@ -43,6 +43,11 @@ class BlockRegistrar extends Singleton
     protected $customAllowedBlocks = [];
 
     /**
+     * @var array
+     */
+    protected $filteredAllowedBlocks = [];
+
+    /**
      * Returns the current theme version as read from the style.css.
      *
      * @return string
@@ -52,18 +57,6 @@ class BlockRegistrar extends Singleton
         return wp_get_theme()->get('Version');
     }
 
-    /**
-     * BlockRegistrar constructor.
-     *
-     * @param string[]|string|true $customAllowedBlocks
-     *        An array of allowed block names or the path to a yaml file – or
-     *        true to allow all block types.
-     * @param string            $scriptPath           The path to the editor
-     *                                                script file relative to
-     *                                                the theme root.
-     * @param string            $scriptHandle         The handle for the editor
-     *                                                script file.
-     */
     protected function __construct() {
         parent::__construct();
 
@@ -116,6 +109,23 @@ class BlockRegistrar extends Singleton
      */
     public function onAllowedBlockTypes()
     {
+        $allowedBlocks = $this->getAllowedBlockTypes();
+
+        if ($allowedBlocks === true) return true;
+
+        $this->filteredAllowedBlocks = apply_filters(self::HOOK_ALLOWED_BLOCKS, $allowedBlocks);
+        return $this->filteredAllowedBlocks;
+    }
+
+    /**
+     * @return string[]|boolean
+     */
+    public function getAllowedBlockTypes()
+    {
+        if (!empty($this->filteredAllowedBlocks)) {
+            return $this->filteredAllowedBlocks;
+        }
+
         $allowedBlocks = [];
 
         if (is_array($this->customAllowedBlocks)) {
@@ -125,10 +135,10 @@ class BlockRegistrar extends Singleton
         ) {
             $allowedBlocks = Yaml::read($this->customAllowedBlocks, [], 'gutenbergAllowedBlocks');
         } else if ($this->customAllowedBlocks === true) {
-            return true;
+            $allowedBlocks = true;
         }
 
-        return apply_filters(self::HOOK_ALLOWED_BLOCKS, $allowedBlocks);
+        return $allowedBlocks;
     }
 
     /**
