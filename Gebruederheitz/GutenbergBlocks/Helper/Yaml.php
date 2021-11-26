@@ -18,7 +18,7 @@ class Yaml
      */
     public static function read(string $filename, $default = [], string $key = null)
     {
-        if (!file_exists($filename)) {
+        if (self::isDirectoryRestricted($filename) || !file_exists($filename)) {
             $filename = get_theme_root() . $filename;
             if (!file_exists($filename)) {
                 return $default;
@@ -40,5 +40,24 @@ class Yaml
         }
 
         return $yaml;
+    }
+
+    protected static function isDirectoryRestricted(string $dir): bool
+    {
+        // Default error handler is required
+        \set_error_handler(null);
+
+        // Clean last error info. You can do it using error_clean_last in PHP 7.
+        @trigger_error('__clean_error_info');
+
+        // Testing...
+        @file_exists($dir);
+
+        // Restore previous error handler
+        \restore_error_handler();
+
+        // Return `true` if error has occured
+        return ($error = error_get_last()) && $error['message'] !== '__clean_error_info';
+
     }
 }
