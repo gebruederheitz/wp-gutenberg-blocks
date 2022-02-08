@@ -14,8 +14,12 @@ class PartialRenderer
      *
      * @return false|string          Rendered content
      */
-    public static function render(string $templatePath, array $data = [], string $content = '', string $overridePath = null)
-    {
+    public static function render(
+        string $templatePath,
+        array $data = [],
+        string $content = '',
+        string $overridePath = null
+    ) {
         foreach ($data as $name => $datum) {
             set_query_var($name, $datum);
         }
@@ -35,7 +39,10 @@ class PartialRenderer
 
         $templatePathUsed = $templatePath;
 
-        if (isset($overridePath) && $overriddenTemplate = locate_template($overridePath)) {
+        if (
+            isset($overridePath) &&
+            ($overriddenTemplate = locate_template($overridePath))
+        ) {
             $templatePathUsed = $overriddenTemplate;
         }
 

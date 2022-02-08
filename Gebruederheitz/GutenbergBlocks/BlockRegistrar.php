@@ -52,7 +52,8 @@ class BlockRegistrar extends Singleton
         return wp_get_theme()->get('Version');
     }
 
-    protected function __construct() {
+    protected function __construct()
+    {
         parent::__construct();
 
         add_action('init', [$this, 'onInit']);
@@ -120,11 +121,13 @@ class BlockRegistrar extends Singleton
 
         if (is_array($this->customAllowedBlocks)) {
             $allowedBlocks = $this->customAllowedBlocks;
-        } else if (
-            is_string($this->customAllowedBlocks)
-        ) {
-            $allowedBlocks = Yaml::read($this->customAllowedBlocks, [], 'gutenbergAllowedBlocks');
-        } else if ($this->customAllowedBlocks === true) {
+        } elseif (is_string($this->customAllowedBlocks)) {
+            $allowedBlocks = Yaml::read(
+                $this->customAllowedBlocks,
+                [],
+                'gutenbergAllowedBlocks',
+            );
+        } elseif ($this->customAllowedBlocks === true) {
             return true;
         }
 
@@ -137,13 +140,10 @@ class BlockRegistrar extends Singleton
      */
     protected function registerBlockScripts()
     {
-        add_filter(
-            'allowed_block_types_all',
-            [$this, 'onAllowedBlockTypes']
-        );
+        add_filter('allowed_block_types_all', [$this, 'onAllowedBlockTypes']);
         wp_register_script(
             $this->scriptHandle,
-            get_template_directory_uri().$this->scriptPath,
+            get_template_directory_uri() . $this->scriptPath,
             [
                 'wp-blocks',
                 'wp-element',
@@ -155,7 +155,7 @@ class BlockRegistrar extends Singleton
                 'wp-edit-post',
                 'wp-plugins',
             ],
-            self::getThemeVersion()
+            self::getThemeVersion(),
         );
 
         /*
@@ -165,45 +165,36 @@ class BlockRegistrar extends Singleton
          */
         $localizationData = apply_filters(
             self::HOOK_SCRIPT_LOCALIZATION_DATA,
-            []
+            [],
         );
         wp_localize_script(
             $this->scriptHandle,
             'editorData',
-            $localizationData
+            $localizationData,
         );
 
-        register_block_type(
-            'ghwp/blocks',
-            [
-                'editor_script' => $this->scriptHandle,
-            ]
-        );
+        register_block_type('ghwp/blocks', [
+            'editor_script' => $this->scriptHandle,
+        ]);
     }
 
     protected function registerDynamicBlocks()
     {
         $blocks = [];
 
-        $blocks = apply_filters(
-            self::HOOK_REGISTER_DYNAMIC_BLOCKS,
-            $blocks,
-        );
+        $blocks = apply_filters(self::HOOK_REGISTER_DYNAMIC_BLOCKS, $blocks);
 
-        foreach($blocks as $block) {
+        foreach ($blocks as $block) {
             $this->registerDynamicBlock($block);
         }
     }
 
     protected function registerDynamicBlock(DynamicBlock $block)
     {
-        register_block_type(
-            $block->getName(),
-            [
-                'editor_script' => $this->scriptHandle,
-                'render_callback' => [$block, 'renderBlock'],
-                'attributes' => $block->getAttributes(),
-            ]
-        );
+        register_block_type($block->getName(), [
+            'editor_script' => $this->scriptHandle,
+            'render_callback' => [$block, 'renderBlock'],
+            'attributes' => $block->getAttributes(),
+        ]);
     }
 }

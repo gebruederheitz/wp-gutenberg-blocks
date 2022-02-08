@@ -16,8 +16,11 @@ class Yaml
      *
      * @return array|mixed
      */
-    public static function read(string $filename, $default = [], string $key = null)
-    {
+    public static function read(
+        string $filename,
+        $default = [],
+        string $key = null
+    ) {
         if (self::isDirectoryRestricted($filename) || !file_exists($filename)) {
             $filename = get_theme_root() . $filename;
             if (!file_exists($filename)) {
@@ -57,7 +60,7 @@ class Yaml
         \restore_error_handler();
 
         // Return `true` if error has occured
-        return ($error = error_get_last()) && $error['message'] !== '__clean_error_info';
-
+        return ($error = error_get_last()) &&
+            $error['message'] !== '__clean_error_info';
     }
 }

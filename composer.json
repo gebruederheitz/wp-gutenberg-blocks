@@ -18,5 +18,12 @@
 	    "php": "^7.3",
         "symfony/yaml": "^5.3",
         "gebruederheitz/simple-singleton": "^1.0"
+    },
+    "scripts": {
+        "lint": "phpstan analyse -c .phpstan.neon"
+    },
+    "require-dev": {
+        "phpstan/phpstan": "^1.4",
+        "szepeviktor/phpstan-wordpress": "^1.0"
     }
 }

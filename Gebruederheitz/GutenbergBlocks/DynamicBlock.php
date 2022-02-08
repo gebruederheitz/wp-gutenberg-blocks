@@ -34,8 +34,8 @@ class DynamicBlock
         array $requiredAttributes = null,
         string $templateOverridePath = null
     ) {
-        $this->name               = $name;
-        $this->partial            = $partial;
+        $this->name = $name;
+        $this->partial = $partial;
 
         if (isset($attributes)) {
             $this->attributes = $attributes;
@@ -52,12 +52,16 @@ class DynamicBlock
 
     public function register()
     {
-         add_filter(BlockRegistrar::HOOK_REGISTER_DYNAMIC_BLOCKS, function($blocks) {
+        add_filter(BlockRegistrar::HOOK_REGISTER_DYNAMIC_BLOCKS, function (
+            $blocks
+        ) {
             $blocks[] = $this;
             return $blocks;
         });
 
-        add_filter(BlockRegistrar::HOOK_ALLOWED_BLOCKS, function($allowedBlocks) {
+        add_filter(BlockRegistrar::HOOK_ALLOWED_BLOCKS, function (
+            $allowedBlocks
+        ) {
             $allowedBlocks[] = $this->name;
             return $allowedBlocks;
         });
@@ -136,7 +140,8 @@ class DynamicBlock
      *
      * @return DynamicBlock
      */
-    public function setRequiredAttributes(array $requiredAttributes
+    public function setRequiredAttributes(
+        array $requiredAttributes
     ): DynamicBlock {
         $this->requiredAttributes = $requiredAttributes;
 
@@ -156,8 +161,9 @@ class DynamicBlock
      *
      * @return DynamicBlock
      */
-    public function setTemplateOverridePath(string $templateOverridePath): DynamicBlock
-    {
+    public function setTemplateOverridePath(
+        string $templateOverridePath
+    ): DynamicBlock {
         $this->templateOverridePath = $templateOverridePath;
 
         return $this;
@@ -195,6 +201,11 @@ class DynamicBlock
             return null;
         }
 
-        return PartialRenderer::render($this->partial, $attributes, $content, $this->templateOverridePath);
+        return PartialRenderer::render(
+            $this->partial,
+            $attributes,
+            $content,
+            $this->templateOverridePath,
+        );
     }
 }
