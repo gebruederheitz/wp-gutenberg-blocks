@@ -19,6 +19,22 @@ class DynamicBlock
     /** @var ?string The path where a theme may override the template used; provide the string as you would use it in get_template_part() */
     protected $templateOverridePath = null;
 
+    public static function make(
+        string $name,
+        string $partial,
+        array $attributes = null,
+        array $requiredAttributes = null,
+        string $templateOverridePath = null
+    ): DynamicBlock {
+        return new DynamicBlock(
+            $name,
+            $partial,
+            $attributes,
+            $requiredAttributes,
+            $templateOverridePath,
+        );
+    }
+
     /**
      * DynamicBlock constructor.
      *

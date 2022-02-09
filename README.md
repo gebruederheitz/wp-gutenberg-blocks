@@ -166,6 +166,12 @@ $myblock = new DynamicBlock(
 $myblock->register();
 ```
 
+As an alternative you can use the factory method to create a Dynamic Block:
+```php
+DynamicBlock::make('ghwp/example', get_template_directory() . '/template-parts/blocks/example.php')
+    ->register();
+```
+
 ## Available Hooks
 
 | Class constant   | hook handle  | type | description |
