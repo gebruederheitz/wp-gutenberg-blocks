@@ -2,8 +2,26 @@
 
 namespace Gebruederheitz\GutenbergBlocks;
 
+use function apply_filters;
+use function add_filter;
+
 class DynamicBlock
 {
+    /**
+     * @hook ghwp-dynamic-block-attributes
+     * @description Filter the block attributes before rendering, with the block
+     *              type as the first and the array of attributes as the
+     *              second parameter.
+     */
+    public const HOOK_FILTER_BLOCK_ATTRIBUTES = 'ghwp-dynamic-block-attributes';
+
+    /**
+     * @hook ghwp-dynamic-block-attributes-${TYPE}
+     * @description Like "ghwp-dynamic-block-attributes", but specific for each
+     *              block type.
+     */
+    public const HOOK_FILTER_BLOCK_TYPE_ATTRIBUTES = 'ghwp-dynamic-block-attributes-';
+
     /** @var string The block's name. This needs to match the name used when registering the block type in JS. */
     protected $name = '';
 
@@ -213,6 +231,15 @@ class DynamicBlock
      */
     public function renderBlock(array $attributes = [], string $content = '')
     {
+        $attributes = apply_filters(
+            self::HOOK_FILTER_BLOCK_ATTRIBUTES,
+            $attributes,
+        );
+        $attributes = apply_filters(
+            self::HOOK_FILTER_BLOCK_TYPE_ATTRIBUTES . $this->name,
+            $attributes,
+        );
+
         if (!$this->requiredAttributesArePresent($attributes)) {
             return null;
         }
