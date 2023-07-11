@@ -52,6 +52,11 @@ class PartialRenderer
         ob_end_clean();
 
         wp_reset_postdata();
+        foreach ($data as $name => $datum) {
+            set_query_var($name, null);
+        }
+        set_query_var('innerBlocks', null);
+        set_query_var('className', null);
 
         return $content;
     }
