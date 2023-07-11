@@ -1,6 +1,6 @@
 {
   "name": "@gebruederheitz/wp-gutenberg-blocks-util",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "description": "Utilities for the gebruederheitz/wp-gutenberg-blocks PHP composer package",
   "main": "",
   "engines": {
