@@ -60,4 +60,21 @@ class PartialRenderer
 
         return $content;
     }
+
+    public static function renderInclude(
+        string $templatePath,
+        array $data = [],
+        string $overridePath = null
+    ) {
+        $templatePathUsed = $templatePath;
+
+        if (
+            isset($overridePath) &&
+            ($overriddenTemplate = locate_template($overridePath))
+        ) {
+            $templatePathUsed = $overriddenTemplate;
+        }
+
+        load_template($templatePathUsed, false, $data);
+    }
 }
