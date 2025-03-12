@@ -193,10 +193,54 @@ class BlockRegistrar extends Singleton
 
     protected function registerDynamicBlock(DynamicBlock $block): void
     {
-        register_block_type($block->getName(), [
-            'editor_script' => $this->scriptHandle,
-            'render_callback' => [$block, 'renderBlock'],
-            'attributes' => $block->getAttributes(),
-        ]);
+        if ($block->getCustomScripts()) {
+            foreach ($block->getCustomScripts() as $handle => $path) {
+                wp_register_script(
+                    $handle,
+                    get_template_directory_uri() . $path,
+                    [
+                        'wp-blocks',
+                        'wp-element',
+                        'wp-editor',
+                        'wp-data',
+                        'wp-components',
+                        'wp-compose',
+                        'wp-i18n',
+                        'wp-edit-post',
+                        'wp-plugins',
+                    ],
+                    self::getThemeVersion(),
+                );
+
+                register_block_type($block->getName(), [
+                    'editor_script' => $handle,
+                    'render_callback' => [$block, 'renderBlock'],
+                    'attributes' => $block->getAttributes(),
+                ]);
+            }
+        } else {
+            // Default route, using the global script bundle
+            register_block_type($block->getName(), [
+                'editor_script' => $this->scriptHandle,
+                'render_callback' => [$block, 'renderBlock'],
+                'attributes' => $block->getAttributes(),
+            ]);
+        }
+
+        $customStylesheets = $block->getCustomStylesheets();
+        if ($customStylesheets) {
+            foreach ($customStylesheets as $handle => $path) {
+                wp_register_style(
+                    $handle,
+                    get_template_directory_uri() . $path,
+                );
+                register_block_style($block->getName(), [
+                    'name' => $handle,
+                    'label' => 'Block Styles for ' . $block->getName(),
+                    'is_default' => true,
+                    'style_handle' => $handle,
+                ]);
+            }
+        }
     }
 }

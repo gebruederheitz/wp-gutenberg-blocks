@@ -38,10 +38,10 @@ class DynamicBlock
     protected $templateOverridePath = null;
 
     /** @var ?array<string, string> */
-    protected $customScript = null;
+    protected $customScripts = null;
 
     /** @var ?array<string, string> */
-    protected $customStylesheet = null;
+    protected $customStylesheets = null;
 
     /**
      * @param ?array<string, mixed> $attributes
@@ -188,6 +188,58 @@ class DynamicBlock
         string $templateOverridePath
     ): DynamicBlock {
         $this->templateOverridePath = $templateOverridePath;
+
+        return $this;
+    }
+
+    /**
+     * @return array<string, string>|null
+     */
+    public function getCustomScripts(): ?array
+    {
+        return $this->customScripts;
+    }
+
+    /**
+     * @param array<string, string>|null $customScripts
+     */
+    public function setCustomScripts(?array $customScripts): DynamicBlock
+    {
+        $this->customScripts = $customScripts;
+        return $this;
+    }
+
+    public function addCustomScript(string $handle, string $path): DynamicBlock
+    {
+        $this->customScripts[$handle] = $path;
+
+        return $this;
+    }
+
+    /**
+     * @return array<string, string>|null
+     */
+    public function getCustomStylesheets(): ?array
+    {
+        return $this->customStylesheets;
+    }
+
+    /**
+     * @param array<string, string>|null $customStylesheets
+     */
+    public function setCustomStylesheets(
+        ?array $customStylesheets
+    ): DynamicBlock {
+        $this->customStylesheets = $customStylesheets;
+
+        return $this;
+    }
+
+    public function addCustomStylesheet(
+        string $handle,
+        string $path
+    ): DynamicBlock {
+        $this->customStylesheets[$handle] = $path;
 
         return $this;
     }
