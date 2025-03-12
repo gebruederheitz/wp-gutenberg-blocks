@@ -28,15 +28,26 @@ class DynamicBlock
     /** @var string The full path to the partial to be used for rendering the block */
     protected $partial = '';
 
-    /** @var array The attributes provided to the renderer with their optional defaults */
+    /** @var array<string, mixed> The attributes provided to the renderer with their optional defaults */
     protected $attributes = [];
 
-    /** @var array Attributes that may not be empty for successful rendering to proceed */
+    /** @var array<string> Attributes that may not be empty for successful rendering to proceed */
     protected $requiredAttributes = [];
 
     /** @var ?string The path where a theme may override the template used; provide the string as you would use it in get_template_part() */
     protected $templateOverridePath = null;
 
+    /** @var ?array<string, string> */
+    protected $customScript = null;
+
+    /** @var ?array<string, string> */
+    protected $customStylesheet = null;
+
+    /**
+     * @param ?array<string, mixed> $attributes
+     * @param ?array<string> $requiredAttributes
+     * @param ?string $templateOverridePath
+     */
     public static function make(
         string $name,
         string $partial,
@@ -56,10 +67,8 @@ class DynamicBlock
     /**
      * DynamicBlock constructor.
      *
-     * @param string  $name
-     * @param string  $partial
-     * @param ?array  $attributes
-     * @param ?array  $requiredAttributes
+     * @param ?array<string, mixed> $attributes
+     * @param ?array<string> $requiredAttributes
      */
     public function __construct(
         string $name,
@@ -84,7 +93,7 @@ class DynamicBlock
         }
     }
 
-    public function register()
+    public function register(): void
     {
         add_filter(BlockRegistrar::HOOK_REGISTER_DYNAMIC_BLOCKS, function (
             $blocks
@@ -101,19 +110,11 @@ class DynamicBlock
         });
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @param string $name
-     *
-     * @return DynamicBlock
-     */
     public function setName(string $name): DynamicBlock
     {
         $this->name = $name;
@@ -121,19 +122,11 @@ class DynamicBlock
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getPartial(): string
     {
         return $this->partial;
     }
 
-    /**
-     * @param string $partial
-     *
-     * @return DynamicBlock
-     */
     public function setPartial(string $partial): DynamicBlock
     {
         $this->partial = $partial;
@@ -142,7 +135,7 @@ class DynamicBlock
     }
 
     /**
-     * @return array
+     * @return array<string, mixed>
      */
     public function getAttributes(): array
     {
@@ -150,9 +143,7 @@ class DynamicBlock
     }
 
     /**
-     * @param array $attributes
-     *
-     * @return DynamicBlock
+     * @param array<string, mixed> $attributes
      */
     public function setAttributes(array $attributes): DynamicBlock
     {
@@ -162,7 +153,7 @@ class DynamicBlock
     }
 
     /**
-     * @return array
+     * @return array<string>
      */
     public function getRequiredAttributes(): array
     {
@@ -170,9 +161,7 @@ class DynamicBlock
     }
 
     /**
-     * @param array $requiredAttributes
-     *
-     * @return DynamicBlock
+     * @param array<string> $requiredAttributes
      */
     public function setRequiredAttributes(
         array $requiredAttributes
@@ -207,9 +196,7 @@ class DynamicBlock
      * Checks whether all required attributes are present (not empty) in the
      * array of attributes passed.
      *
-     * @param array $attributes The attributes passed by the block
-     *
-     * @return bool
+     * @param array<string, mixed> $attributes The attributes passed by the block
      */
     protected function requiredAttributesArePresent(array $attributes): bool
     {
@@ -225,7 +212,7 @@ class DynamicBlock
      * Callback for the block registration handler, which will render the block
      * with the attributes provided.
      *
-     * @param array $attributes
+     * @param array<string, mixed> $attributes
      *
      * @return false|string|null
      */

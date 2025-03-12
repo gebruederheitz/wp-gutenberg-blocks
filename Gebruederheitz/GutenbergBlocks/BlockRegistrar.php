@@ -37,15 +37,14 @@ class BlockRegistrar extends Singleton
     protected $scriptPath = '/js/backend.js';
 
     /**
-     * @var array|string|true An array of allowed block names or the path to a
-     *                        yaml file – or true to allow all block types.
+     * @var array<string>|string|true An array of allowed block names or the
+     *                                 path to a yaml file – or true to allow
+     *                                 all block types.
      */
     protected $customAllowedBlocks = [];
 
     /**
      * Returns the current theme version as read from the style.css.
-     *
-     * @return string
      */
     public static function getThemeVersion(): string
     {
@@ -74,9 +73,12 @@ class BlockRegistrar extends Singleton
         return $this;
     }
 
+    /**
+     * @param array<string>|string|true|null $customAllowedBlocks
+     */
     public function setAllowedBlocks($customAllowedBlocks = null): self
     {
-        $this->customAllowedBlocks = $customAllowedBlocks;
+        $this->customAllowedBlocks = $customAllowedBlocks ?: [];
 
         return $this;
     }
@@ -84,7 +86,7 @@ class BlockRegistrar extends Singleton
     /**
      * Callback for the 'init' action hook.
      */
-    public function onInit()
+    public function onInit(): void
     {
         $this->registerDynamicBlocks();
     }
@@ -92,7 +94,7 @@ class BlockRegistrar extends Singleton
     /**
      * Callback for the 'admin_init' action hook.
      */
-    public function onAdminInit()
+    public function onAdminInit(): void
     {
         $this->registerBlockScripts();
     }
@@ -138,7 +140,7 @@ class BlockRegistrar extends Singleton
      * Registers the custom gutenberg blocks and sets the data they require;
      * restricts the block types shown to the user
      */
-    protected function registerBlockScripts()
+    protected function registerBlockScripts(): void
     {
         add_filter('allowed_block_types_all', [$this, 'onAllowedBlockTypes']);
         wp_register_script(
@@ -178,7 +180,7 @@ class BlockRegistrar extends Singleton
         ]);
     }
 
-    protected function registerDynamicBlocks()
+    protected function registerDynamicBlocks(): void
     {
         $blocks = [];
 
@@ -189,7 +191,7 @@ class BlockRegistrar extends Singleton
         }
     }
 
-    protected function registerDynamicBlock(DynamicBlock $block)
+    protected function registerDynamicBlock(DynamicBlock $block): void
     {
         register_block_type($block->getName(), [
             'editor_script' => $this->scriptHandle,

@@ -8,9 +8,8 @@ class PartialRenderer
      * Renders a template part.
      *
      * @param string $templatePath The template partial's full path
-     * @param array  $data         Data you want to provide to the template via
-     *                                 query parameters in the format
-     *                                 [string] parameterName => [mixed] data
+     * @param array<string, mixed> $data Data you want to provide to the template via
+     *                                   query parameters
      *
      * @return false|string          Rendered content
      */
@@ -61,11 +60,14 @@ class PartialRenderer
         return $content;
     }
 
+    /**
+     * @param array<string, mixed> $data
+     */
     public static function renderInclude(
         string $templatePath,
         array $data = [],
         string $overridePath = null
-    ) {
+    ): void {
         $templatePathUsed = $templatePath;
 
         if (

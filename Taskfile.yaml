@@ -1,0 +1,55 @@
+version: 3
+tasks:
+  lint:
+    deps:
+      - install-dependencies
+    cmds:
+      - task: lint:node
+      - composer lint
+
+  lint:node:
+    dir: util
+    internal: true
+    cmd: npm run lint
+
+  prettier:
+    desc: Make prettier process and fix all files in src/
+    dir: util
+    deps:
+      - install-dependencies
+    cmd: npx prettier -w --config .prettierrc ../Gebruederheitz/
+
+  release:
+    desc: Create a tagged release to publish a new version of the package
+    deps:
+     - lint
+     - install-dependencies
+    dir: util
+    cmd: npm run release
+
+  install-dependencies:
+    internal: true
+    dir: util
+    deps:
+      - install-dependencies:node
+      - install-dependencies:php
+
+  install-dependencies:node:
+    internal: true
+    dir: util
+    sources:
+      - package.json
+      - package-lock.json
+    generates:
+      - package-lock.json
+      - node_modules/**/*
+    cmd: npm i
+
+  install-dependencies:php:
+    internal: true
+    sources:
+      - composer.json
+      - composer.lock
+    generates:
+      - vendor/**/*
+    cmd: composer install
