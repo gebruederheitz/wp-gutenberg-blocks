@@ -4,6 +4,7 @@ namespace Gebruederheitz\GutenbergBlocks;
 
 use Gebruederheitz\GutenbergBlocks\Helper\Yaml;
 use Gebruederheitz\SimpleSingleton\Singleton;
+use WP_Block_Editor_Context;
 
 class BlockRegistrar extends Singleton
 {
@@ -18,6 +19,12 @@ class BlockRegistrar extends Singleton
      * @description Filters the blocks shown to editors in Gutenberg.
      */
     const HOOK_ALLOWED_BLOCKS = 'ghwp-allowed-gutenberg-blocks';
+
+    /**
+     * @hook ghwp-allowed-widget-blocks
+     * @description Filters the blocks shown to editors in widget editing areas.
+     */
+    const HOOK_ALLOWED_WIDGET_BLOCKS = 'ghwp-allowed-widget-blocks';
 
     /**
      * @hook ghwp-script-localization-data
@@ -38,8 +45,7 @@ class BlockRegistrar extends Singleton
 
     /**
      * @var array<string>|string|true An array of allowed block names or the
-     *                                 path to a yaml file – or true to allow
-     *                                 all block types.
+     *          path to a yaml file – or true to allow all block types.
      */
     protected $customAllowedBlocks = [];
 
@@ -103,20 +109,43 @@ class BlockRegistrar extends Singleton
      * Callback for the 'allowed_block_types_all' filter hook, returning an
      * array of allowed core & custom block types shown to the editor.
      *
+     * @param bool|string[] $allowedBlockTypes Array of block type slugs, or boolean to enable/disable all.
+     *                                         Default true (all registered block types supported).
      * @return string[]|bool
      */
-    public function onAllowedBlockTypes()
-    {
-        return $this->getAllowedBlockTypes();
+    public function onAllowedBlockTypes(
+        $allowedBlockTypes,
+        WP_Block_Editor_Context $context
+    ) {
+        return $this->getAllowedBlockTypes($context);
     }
 
     /**
      * @return string[]|boolean
+     *
+     * Also handles blocks allowed in widget areas / sidebars:
+     *   https://github.com/WordPress/gutenberg/issues/28517#issuecomment-1070239810
      */
-    public function getAllowedBlockTypes()
+    public function getAllowedBlockTypes(WP_Block_Editor_Context $context)
     {
-        if (!empty($this->filteredAllowedBlocks)) {
-            return $this->filteredAllowedBlocks;
+        if (
+            in_array($context->name, [
+                'core/edit-widgets',
+                'core/customize-widgets',
+            ])
+        ) {
+            if (is_string($this->customAllowedBlocks)) {
+                $widgetAllowedBlocks = Yaml::read(
+                    $this->customAllowedBlocks,
+                    [],
+                    'widgetsAllowedBlocks',
+                );
+            }
+
+            return apply_filters(
+                self::HOOK_ALLOWED_WIDGET_BLOCKS,
+                $widgetAllowedBlocks ?? [],
+            );
         }
 
         $allowedBlocks = [];
@@ -142,7 +171,12 @@ class BlockRegistrar extends Singleton
      */
     protected function registerBlockScripts(): void
     {
-        add_filter('allowed_block_types_all', [$this, 'onAllowedBlockTypes']);
+        add_filter(
+            'allowed_block_types_all',
+            [$this, 'onAllowedBlockTypes'],
+            10,
+            2,
+        );
         wp_register_script(
             $this->scriptHandle,
             get_template_directory_uri() . $this->scriptPath,
