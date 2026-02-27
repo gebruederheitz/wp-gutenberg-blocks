@@ -126,9 +126,11 @@ class BlockRegistrar extends Singleton
      * Also handles blocks allowed in widget areas / sidebars:
      *   https://github.com/WordPress/gutenberg/issues/28517#issuecomment-1070239810
      */
-    public function getAllowedBlockTypes(WP_Block_Editor_Context $context)
-    {
+    public function getAllowedBlockTypes(
+        ?WP_Block_Editor_Context $context = null
+    ) {
         if (
+            $context !== null &&
             in_array($context->name, [
                 'core/edit-widgets',
                 'core/customize-widgets',
