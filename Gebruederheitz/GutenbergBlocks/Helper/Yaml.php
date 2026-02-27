@@ -54,6 +54,7 @@ class Yaml
         @trigger_error('__clean_error_info');
 
         // Testing...
+        /** @phpstan-ignore expr.resultUnused */
         @file_exists($dir);
 
         // Restore previous error handler
