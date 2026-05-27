@@ -49,6 +49,19 @@ class BlockRegistrar extends Singleton
      */
     protected string|array|true $customAllowedBlocks = [];
 
+    /** @var string[] */
+    protected array $wordpressEditorScriptDependencies =  [
+        'wp-blocks',
+        'wp-element',
+        'wp-editor',
+        'wp-data',
+        'wp-components',
+        'wp-compose',
+        'wp-i18n',
+        'wp-edit-post',
+        'wp-plugins',
+    ];
+
     /**
      * Returns the current theme version as read from the style.css.
      */
@@ -85,6 +98,28 @@ class BlockRegistrar extends Singleton
     public function setAllowedBlocks(array|true|string $customAllowedBlocks = null): self
     {
         $this->customAllowedBlocks = $customAllowedBlocks ?: [];
+
+        return $this;
+    }
+
+    /**
+     * @param string[] $wordpressEditorScriptDependencies
+     */
+    public function setWordpressEditorScriptDependencies(array $wordpressEditorScriptDependencies): self
+    {
+        $this->wordpressEditorScriptDependencies = $wordpressEditorScriptDependencies;
+        return $this;
+    }
+
+    /**
+     * @param string[] $additionalWEditorScriptDependencies
+     */
+    public function addWordpressEditorScriptDependencies(array $additionalWEditorScriptDependencies): self
+    {
+        $this->wordpressEditorScriptDependencies = array_unique(array_merge(
+            $this->wordpressEditorScriptDependencies,
+            $additionalWEditorScriptDependencies,
+        ));
 
         return $this;
     }
@@ -180,17 +215,7 @@ class BlockRegistrar extends Singleton
         wp_register_script(
             $this->scriptHandle,
             get_template_directory_uri() . $this->scriptPath,
-            [
-                'wp-blocks',
-                'wp-element',
-                'wp-editor',
-                'wp-data',
-                'wp-components',
-                'wp-compose',
-                'wp-i18n',
-                'wp-edit-post',
-                'wp-plugins',
-            ],
+            $this->wordpressEditorScriptDependencies,
             self::getThemeVersion(),
         );
 
