@@ -36,18 +36,18 @@ class BlockRegistrar extends Singleton
     /**
      * @var string The handle for the editor script file.
      */
-    protected $scriptHandle = 'ghwp-gutenberg-blocks';
+    protected string $scriptHandle = 'ghwp-gutenberg-blocks';
 
     /**
      * @var string The path to the editor script file relative to the theme root
      */
-    protected $scriptPath = '/js/backend.js';
+    protected string $scriptPath = '/js/backend.js';
 
     /**
      * @var array<string>|string|true An array of allowed block names or the
      *          path to a yaml file – or true to allow all block types.
      */
-    protected $customAllowedBlocks = [];
+    protected string|array|true $customAllowedBlocks = [];
 
     /**
      * Returns the current theme version as read from the style.css.
@@ -80,9 +80,9 @@ class BlockRegistrar extends Singleton
     }
 
     /**
-     * @param array<string>|string|true|null $customAllowedBlocks
+     * @param true|string|array<string>|null $customAllowedBlocks
      */
-    public function setAllowedBlocks($customAllowedBlocks = null): self
+    public function setAllowedBlocks(array|true|string $customAllowedBlocks = null): self
     {
         $this->customAllowedBlocks = $customAllowedBlocks ?: [];
 
@@ -114,21 +114,21 @@ class BlockRegistrar extends Singleton
      * @return string[]|bool
      */
     public function onAllowedBlockTypes(
-        $allowedBlockTypes,
+        array|bool $allowedBlockTypes,
         WP_Block_Editor_Context $context
-    ) {
+    ): array | bool {
         return $this->getAllowedBlockTypes($context);
     }
 
     /**
-     * @return string[]|boolean
+     * @return string[]|bool
      *
      * Also handles blocks allowed in widget areas / sidebars:
      *   https://github.com/WordPress/gutenberg/issues/28517#issuecomment-1070239810
      */
     public function getAllowedBlockTypes(
         ?WP_Block_Editor_Context $context = null
-    ) {
+    ): array | bool {
         if (
             $context !== null &&
             in_array($context->name, [
@@ -138,9 +138,8 @@ class BlockRegistrar extends Singleton
         ) {
             if (is_string($this->customAllowedBlocks)) {
                 $widgetAllowedBlocks = Yaml::read(
-                    $this->customAllowedBlocks,
-                    [],
-                    'widgetsAllowedBlocks',
+                    filename: $this->customAllowedBlocks,
+                    key: 'widgetsAllowedBlocks',
                 );
             }
 
@@ -156,9 +155,8 @@ class BlockRegistrar extends Singleton
             $allowedBlocks = $this->customAllowedBlocks;
         } elseif (is_string($this->customAllowedBlocks)) {
             $allowedBlocks = Yaml::read(
-                $this->customAllowedBlocks,
-                [],
-                'gutenbergAllowedBlocks',
+                filename: $this->customAllowedBlocks,
+                key: 'gutenbergAllowedBlocks',
             );
         } elseif ($this->customAllowedBlocks === true) {
             return true;

@@ -11,16 +11,17 @@ class Yaml
      * Parses a YAML file and returns its content. In case of failure returns
      * $default.
      *
+     * @template T of array
      * @param  string $filename The path to the YAML file (relative to the themes root or absolute filesystem path)
-     * @param  mixed  $default A fallback default to return if reading fails.
+     * @param  T  $default A fallback default to return if reading fails.
      *
-     * @return array|mixed
+     * @return T
      */
     public static function read(
         string $filename,
-        $default = [],
+        array $default = [],
         string $key = null
-    ) {
+    ): array {
         if (self::isDirectoryRestricted($filename) || !file_exists($filename)) {
             $filename = get_theme_root() . $filename;
             if (!file_exists($filename)) {

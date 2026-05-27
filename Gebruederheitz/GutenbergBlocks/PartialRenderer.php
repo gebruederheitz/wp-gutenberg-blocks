@@ -18,7 +18,8 @@ class PartialRenderer
         array $data = [],
         string $content = '',
         string $overridePath = null
-    ) {
+    ): false|string
+    {
         foreach ($data as $name => $datum) {
             set_query_var($name, $datum);
         }

@@ -23,25 +23,25 @@ class DynamicBlock
     public const HOOK_FILTER_BLOCK_TYPE_ATTRIBUTES = 'ghwp-dynamic-block-attributes-';
 
     /** @var string The block's name. This needs to match the name used when registering the block type in JS. */
-    protected $name = '';
+    protected string $name = '';
 
     /** @var string The full path to the partial to be used for rendering the block */
-    protected $partial = '';
+    protected string $partial = '';
 
     /** @var array<string, mixed> The attributes provided to the renderer with their optional defaults */
-    protected $attributes = [];
+    protected array $attributes = [];
 
     /** @var array<string> Attributes that may not be empty for successful rendering to proceed */
-    protected $requiredAttributes = [];
+    protected array $requiredAttributes = [];
 
     /** @var ?string The path where a theme may override the template used; provide the string as you would use it in get_template_part() */
-    protected $templateOverridePath = null;
+    protected string|null $templateOverridePath = null;
 
     /** @var ?array<string, string> */
-    protected $customScripts = null;
+    protected array|null $customScripts = null;
 
     /** @var ?array<string, string> */
-    protected $customStylesheets = null;
+    protected array|null $customStylesheets = null;
 
     /**
      * @param ?array<string, mixed> $attributes
