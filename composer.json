@@ -15,7 +15,7 @@
         }
     ],
     "require": {
-	    "php": ">=7.3",
+        "php": ">=8.2",
         "symfony/yaml": "^v7.4.6",
         "gebruederheitz/simple-singleton": "^1.0"
     },

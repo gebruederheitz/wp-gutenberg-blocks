@@ -37,6 +37,7 @@ tasks:
   install-dependencies:node:
     internal: true
     dir: util
+    run: when_changed
     sources:
       - package.json
       - package-lock.json
@@ -47,6 +48,7 @@ tasks:
 
   install-dependencies:php:
     internal: true
+    run: when_changed
     sources:
       - composer.json
       - composer.lock
