@@ -1,0 +1,5 @@
+gutenbergAllowedBlocks:
+  - core/paragraph
+  - ghwp/teaser
+widgetsAllowedBlocks:
+  - core/legacy-widget

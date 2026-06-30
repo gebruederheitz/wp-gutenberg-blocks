@@ -8,6 +8,11 @@
             "Gebruederheitz\\GutenbergBlocks\\": "Gebruederheitz/GutenbergBlocks/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Gebruederheitz\\GutenbergBlocks\\Tests\\": "tests/"
+        }
+    },
     "authors": [
         {
             "name": "Andreas Maros",
@@ -20,9 +25,11 @@
         "gebruederheitz/simple-singleton": "^1.0"
     },
     "scripts": {
-        "lint": "phpstan --memory-limit=2G analyse -c .phpstan.neon"
+        "lint": "phpstan --memory-limit=2G analyse -c .phpstan.neon",
+        "test": "phpunit"
     },
     "require-dev": {
+        "phpunit/phpunit": "^11.5",
         "phpstan/phpstan": "^2.2.2",
         "szepeviktor/phpstan-wordpress": "^v2.0.3",
         "wecodemore/wpstarter": "~3.0.1",
