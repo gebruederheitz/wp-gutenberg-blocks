@@ -20,7 +20,7 @@ class Yaml
     public static function read(
         string $filename,
         array $default = [],
-        string $key = null
+        string|null $key = null
     ): array {
         if (self::isDirectoryRestricted($filename) || !file_exists($filename)) {
             $filename = get_theme_root() . $filename;

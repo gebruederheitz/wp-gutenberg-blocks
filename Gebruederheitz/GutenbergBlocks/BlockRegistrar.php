@@ -95,7 +95,7 @@ class BlockRegistrar extends Singleton
     /**
      * @param true|string|array<string>|null $customAllowedBlocks
      */
-    public function setAllowedBlocks(array|true|string $customAllowedBlocks = null): self
+    public function setAllowedBlocks(array|true|string|null $customAllowedBlocks = null): self
     {
         $this->customAllowedBlocks = $customAllowedBlocks ?: [];
 

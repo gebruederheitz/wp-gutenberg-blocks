@@ -51,9 +51,9 @@ class DynamicBlock
     public static function make(
         string $name,
         string $partial,
-        array $attributes = null,
-        array $requiredAttributes = null,
-        string $templateOverridePath = null
+        array|null $attributes = null,
+        array|null $requiredAttributes = null,
+        string|null $templateOverridePath = null
     ): DynamicBlock {
         return new DynamicBlock(
             $name,
@@ -73,9 +73,9 @@ class DynamicBlock
     public function __construct(
         string $name,
         string $partial,
-        array $attributes = null,
-        array $requiredAttributes = null,
-        string $templateOverridePath = null
+        array|null $attributes = null,
+        array|null $requiredAttributes = null,
+        string|null $templateOverridePath = null
     ) {
         $this->name = $name;
         $this->partial = $partial;
