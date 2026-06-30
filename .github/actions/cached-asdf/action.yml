@@ -1,0 +1,31 @@
+name: cached-asdf
+description: >
+  Install asdf and all required languages, caching the languages between workflow runs.
+  Additionally installs go-task (optional).
+inputs:
+  skip-task-setup:
+    description: >
+      Whether to skip the setup of go-task. Set this to true if you don't need go-task
+      in your workflow, to save some time."
+    required: false
+    default: "false"
+runs:
+  using: composite
+  steps:
+    - uses: actions/checkout@v7
+    - name: Install asdf base
+      uses: asdf-vm/actions/setup@v4
+    - name: Set up asdf cache
+      id: asdf-cache
+      uses: actions/cache@v6
+      with:
+        path: ~/.asdf/
+        key: ${{ runner.os }}-asdf-${{ hashFiles('**/.tool-versions') }}
+        restore-keys: |
+          ${{ runner.os }}-asdf-
+    - name: Install languages if required
+      if: steps.asdf-cache.outputs.cache-hit != 'true'
+      uses: asdf-vm/actions/install@v4
+    - name: Setup go-task
+      if: inputs.skip-task-setup != 'true'
+      uses: go-task/setup-task@v2

@@ -1,5 +1,11 @@
 version: 3
 tasks:
+  ci:test:
+    desc: Install PHP dependencies and run the test suite (used by CI)
+    cmds:
+      - composer install --no-interaction --prefer-dist
+      - composer test
+
   lint:
     deps:
       - install-dependencies
