@@ -1,4 +1,4 @@
-name: Test
+name: CI
 
 on:
   push:
@@ -20,13 +20,6 @@ jobs:
       - name: Setup languages and tools
         uses: ./.github/actions/cached-asdf
 
-      - name: Install Composer
-        run: |
-          php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-          php composer-setup.php --install-dir="$HOME/.local/bin" --filename=composer
-          rm composer-setup.php
-          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
-
       - name: Cache Composer packages
         id: composer-cache
         uses: actions/cache@v6
@@ -46,3 +39,35 @@ jobs:
 
       - name: Run the test suite
         run: task ci:test
+
+  lint:
+    runs-on: ubuntu-latest
+    env:
+      TZ: "/usr/share/zoneinfo/Europe/Berlin"
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      - name: Setup languages and tools
+        uses: ./.github/actions/cached-asdf
+
+      - name: Cache Composer packages
+        id: composer-cache
+        uses: actions/cache@v6
+        with:
+          path: vendor
+          key: composer-cache-${{ github.ref_name }}-v1-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            composer-cache-${{ github.ref_name }}-v1-
+
+      - name: Cache Composer local
+        uses: actions/cache@v6
+        with:
+          path: ~/.cache/composer
+          key: composer-local-cache-${{ github.ref_name }}-v1
+          restore-keys: |
+            composer-local-cache-${{ github.ref_name }}-
+
+      - name: Run the linting suite
+        run: task lint
