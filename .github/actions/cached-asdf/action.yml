@@ -23,6 +23,13 @@ runs:
         key: ${{ runner.os }}-asdf-${{ hashFiles('**/.tool-versions') }}
         restore-keys: |
           ${{ runner.os }}-asdf-
+    - name: Install PHP build-time dependencies
+      if: steps.asdf-cache.outputs.cache-hit != 'true'
+      shell: bash
+      run: >
+        wget -qO- "https://raw.githubusercontent.com/php-build/php-build/refs/heads/master/install-dependencies.sh" 
+        | /bin/sh
+        && sudo apt-get install libgd-dev
     - name: Install languages if required
       if: steps.asdf-cache.outputs.cache-hit != 'true'
       uses: asdf-vm/actions/install@v4
