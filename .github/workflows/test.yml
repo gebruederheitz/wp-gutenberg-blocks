@@ -18,12 +18,12 @@ jobs:
         uses: actions/checkout@v7
 
       - name: Setup languages and tools
-        uses: gebruederheitz/actions/cached-asdf@1
+        uses: gebruederheitz/actions/cached-asdf@v1
         with:
           setup-task: true
 
       - name: Composer Cache
-        uses: gebruederheitz/actions/composer-cache@1
+        uses: gebruederheitz/actions/composer-cache@v1
 
       - name: Run the test suite
         run: task ci:test
