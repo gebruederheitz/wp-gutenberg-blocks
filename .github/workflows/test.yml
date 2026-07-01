@@ -18,24 +18,12 @@ jobs:
         uses: actions/checkout@v7
 
       - name: Setup languages and tools
-        uses: ./.github/actions/cached-asdf
-
-      - name: Cache Composer packages
-        id: composer-cache
-        uses: actions/cache@v6
+        uses: gebruederheitz/actions/cached-asdf@v1
         with:
-          path: vendor
-          key: composer-cache-${{ github.ref_name }}-v1-${{ hashFiles('**/composer.lock') }}
-          restore-keys: |
-            composer-cache-${{ github.ref_name }}-v1-
+          setup-task: true
 
-      - name: Cache Composer local
-        uses: actions/cache@v6
-        with:
-          path: ~/.cache/composer
-          key: composer-local-cache-${{ github.ref_name }}-v1
-          restore-keys: |
-            composer-local-cache-${{ github.ref_name }}-
+      - name: Composer Cache
+        uses: gebruederheitz/actions/composer-cache@v1
 
       - name: Run the test suite
         run: task ci:test
