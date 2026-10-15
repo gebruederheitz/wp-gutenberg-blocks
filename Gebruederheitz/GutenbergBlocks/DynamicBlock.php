@@ -53,7 +53,7 @@ class DynamicBlock
         string $partial,
         array|null $attributes = null,
         array|null $requiredAttributes = null,
-        string|null $templateOverridePath = null
+        string|null $templateOverridePath = null,
     ): DynamicBlock {
         return new DynamicBlock(
             $name,
@@ -75,7 +75,7 @@ class DynamicBlock
         string $partial,
         array|null $attributes = null,
         array|null $requiredAttributes = null,
-        string|null $templateOverridePath = null
+        string|null $templateOverridePath = null,
     ) {
         $this->name = $name;
         $this->partial = $partial;
@@ -96,14 +96,14 @@ class DynamicBlock
     public function register(): void
     {
         add_filter(BlockRegistrar::HOOK_REGISTER_DYNAMIC_BLOCKS, function (
-            $blocks
+            $blocks,
         ) {
             $blocks[] = $this;
             return $blocks;
         });
 
         add_filter(BlockRegistrar::HOOK_ALLOWED_BLOCKS, function (
-            $allowedBlocks
+            $allowedBlocks,
         ) {
             $allowedBlocks[] = $this->name;
             return $allowedBlocks;
@@ -164,7 +164,7 @@ class DynamicBlock
      * @param array<string> $requiredAttributes
      */
     public function setRequiredAttributes(
-        array $requiredAttributes
+        array $requiredAttributes,
     ): DynamicBlock {
         $this->requiredAttributes = $requiredAttributes;
 
@@ -185,7 +185,7 @@ class DynamicBlock
      * @return DynamicBlock
      */
     public function setTemplateOverridePath(
-        string $templateOverridePath
+        string $templateOverridePath,
     ): DynamicBlock {
         $this->templateOverridePath = $templateOverridePath;
 
@@ -228,7 +228,7 @@ class DynamicBlock
      * @param array<string, string>|null $customStylesheets
      */
     public function setCustomStylesheets(
-        ?array $customStylesheets
+        ?array $customStylesheets,
     ): DynamicBlock {
         $this->customStylesheets = $customStylesheets;
 
@@ -237,7 +237,7 @@ class DynamicBlock
 
     public function addCustomStylesheet(
         string $handle,
-        string $path
+        string $path,
     ): DynamicBlock {
         $this->customStylesheets[$handle] = $path;
 
