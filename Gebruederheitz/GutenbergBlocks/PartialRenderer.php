@@ -17,9 +17,8 @@ class PartialRenderer
         string $templatePath,
         array $data = [],
         string $content = '',
-        string|null $overridePath = null
-    ): false|string
-    {
+        string|null $overridePath = null,
+    ): false|string {
         foreach ($data as $name => $datum) {
             set_query_var($name, $datum);
         }
@@ -67,7 +66,7 @@ class PartialRenderer
     public static function renderInclude(
         string $templatePath,
         array $data = [],
-        string|null $overridePath = null
+        string|null $overridePath = null,
     ): void {
         $templatePathUsed = $templatePath;
 

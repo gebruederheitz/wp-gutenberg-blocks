@@ -23,7 +23,7 @@ tasks:
     dir: util
     deps:
       - install-dependencies
-    cmd: npx prettier -w --config .prettierrc ../Gebruederheitz/
+    cmd: npx prettier -w --config ../.prettierrc ../Gebruederheitz/
 
   release:
     desc: Create a tagged release to publish a new version of the package

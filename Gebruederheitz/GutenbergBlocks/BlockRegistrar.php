@@ -50,7 +50,7 @@ class BlockRegistrar extends Singleton
     protected string|array|true $customAllowedBlocks = [];
 
     /** @var string[] */
-    protected array $wordpressEditorScriptDependencies =  [
+    protected array $wordpressEditorScriptDependencies = [
         'wp-blocks',
         'wp-element',
         'wp-editor',
@@ -95,8 +95,9 @@ class BlockRegistrar extends Singleton
     /**
      * @param true|string|array<string>|null $customAllowedBlocks
      */
-    public function setAllowedBlocks(array|true|string|null $customAllowedBlocks = null): self
-    {
+    public function setAllowedBlocks(
+        array|true|string|null $customAllowedBlocks = null,
+    ): self {
         $this->customAllowedBlocks = $customAllowedBlocks ?: [];
 
         return $this;
@@ -105,8 +106,9 @@ class BlockRegistrar extends Singleton
     /**
      * @param string[] $wordpressEditorScriptDependencies
      */
-    public function setWordpressEditorScriptDependencies(array $wordpressEditorScriptDependencies): self
-    {
+    public function setWordpressEditorScriptDependencies(
+        array $wordpressEditorScriptDependencies,
+    ): self {
         $this->wordpressEditorScriptDependencies = $wordpressEditorScriptDependencies;
         return $this;
     }
@@ -114,12 +116,15 @@ class BlockRegistrar extends Singleton
     /**
      * @param string[] $additionalWEditorScriptDependencies
      */
-    public function addWordpressEditorScriptDependencies(array $additionalWEditorScriptDependencies): self
-    {
-        $this->wordpressEditorScriptDependencies = array_unique(array_merge(
-            $this->wordpressEditorScriptDependencies,
-            $additionalWEditorScriptDependencies,
-        ));
+    public function addWordpressEditorScriptDependencies(
+        array $additionalWEditorScriptDependencies,
+    ): self {
+        $this->wordpressEditorScriptDependencies = array_unique(
+            array_merge(
+                $this->wordpressEditorScriptDependencies,
+                $additionalWEditorScriptDependencies,
+            ),
+        );
 
         return $this;
     }
@@ -150,8 +155,8 @@ class BlockRegistrar extends Singleton
      */
     public function onAllowedBlockTypes(
         array|bool $allowedBlockTypes,
-        WP_Block_Editor_Context $context
-    ): array | bool {
+        WP_Block_Editor_Context $context,
+    ): array|bool {
         return $this->getAllowedBlockTypes($context);
     }
 
@@ -162,8 +167,8 @@ class BlockRegistrar extends Singleton
      *   https://github.com/WordPress/gutenberg/issues/28517#issuecomment-1070239810
      */
     public function getAllowedBlockTypes(
-        ?WP_Block_Editor_Context $context = null
-    ): array | bool {
+        ?WP_Block_Editor_Context $context = null,
+    ): array|bool {
         if (
             $context !== null &&
             in_array($context->name, [
