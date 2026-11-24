@@ -7,6 +7,11 @@ class PartialRenderer
     /**
      * Renders a template part.
      *
+     * Every data key, `innerBlocks` (the inner content) and `className` are
+     * set as query vars for the template and restored to their previous
+     * values afterwards, so a template can itself render further partials
+     * without leaking its own values into them or losing them.
+     *
      * @param string $templatePath The template partial's full path
      * @param array<string, mixed> $data Data you want to provide to the template via
      *                                   query parameters
@@ -19,21 +24,24 @@ class PartialRenderer
         string $content = '',
         string|null $overridePath = null,
     ): false|string {
-        foreach ($data as $name => $datum) {
-            set_query_var($name, $datum);
+        $queryVars = $data;
+        $queryVars['innerBlocks'] = !empty($content)
+            ? $content
+            : $data['innerBlocks'] ?? null;
+        $queryVars['className'] = $data['className'] ?? null;
+
+        $previousQueryVars = [];
+        foreach ($queryVars as $name => $value) {
+            $previousQueryVars[$name] = get_query_var($name, null);
+            set_query_var($name, $value);
         }
+
         if (isset($data['postId'])) {
             $post = get_post($data['postId']);
         }
         if (isset($post) || isset($data['post'])) {
             $post = $post ?? $data['post'];
             setup_postdata($post);
-        }
-        if (!empty($content)) {
-            set_query_var('innerBlocks', $content);
-        }
-        if (!empty($data['className'])) {
-            set_query_var('className', $data['className']);
         }
 
         $templatePathUsed = $templatePath;
@@ -51,11 +59,9 @@ class PartialRenderer
         ob_end_clean();
 
         wp_reset_postdata();
-        foreach ($data as $name => $datum) {
-            set_query_var($name, null);
+        foreach ($previousQueryVars as $name => $value) {
+            set_query_var($name, $value);
         }
-        set_query_var('innerBlocks', null);
-        set_query_var('className', null);
 
         return $content;
     }
